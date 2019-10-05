@@ -13,11 +13,19 @@ import { ReactiveEffect } from './effect'
 // Conceptually, it's easier to think of a dependency as a Dep class
 // which maintains a Set of subscribers, but we simply store them as
 // raw Sets to reduce memory overhead.
+
+// targetMap 存储依赖关系，类似以下结构
+// {
+//   target: {
+//     key: Dep
+//   }
+// }
 export type Dep = Set<ReactiveEffect>
 export type KeyToDepMap = Map<string | symbol, Dep>
 export const targetMap: WeakMap<any, KeyToDepMap> = new WeakMap()
 
 // WeakMaps that store {raw <-> observed} pairs.
+// 用于存储 proxy 对象
 const rawToReactive: WeakMap<any, any> = new WeakMap()
 const reactiveToRaw: WeakMap<any, any> = new WeakMap()
 const rawToReadonly: WeakMap<any, any> = new WeakMap()
@@ -40,9 +48,12 @@ const canObserve = (value: any): boolean => {
   )
 }
 
+// TS 解释：T 直接认为是一个类型，这个类型继承自 object。函数参数是 object，返回值类型中也用到了 object
+// 不明白的话去这个类型的具体文件看我的注释
 export function reactive<T extends object>(target: T): UnwrapNestedRefs<T>
 export function reactive(target: object) {
   // if trying to observe a readonly proxy, return the readonly version.
+  // 判断是否为 readonly
   if (readonlyToRaw.has(target)) {
     return target
   }
@@ -50,6 +61,7 @@ export function reactive(target: object) {
   if (readonlyValues.has(target)) {
     return readonly(target)
   }
+  // 不是 readonly 就创建一个响应式对象，创建出来的对象和源对象不等
   return createReactiveObject(
     target,
     rawToReactive,
@@ -77,6 +89,7 @@ export function readonly(target: object) {
   )
 }
 
+// 这个函数看完这个文件就没啥重要的了
 function createReactiveObject(
   target: any,
   toProxy: WeakMap<any, any>,
@@ -84,6 +97,7 @@ function createReactiveObject(
   baseHandlers: ProxyHandler<any>,
   collectionHandlers: ProxyHandler<any>
 ) {
+  // 判断是不是对象
   if (!isObject(target)) {
     if (__DEV__) {
       console.warn(`value cannot be made reactive: ${String(target)}`)
@@ -91,6 +105,7 @@ function createReactiveObject(
     return target
   }
   // target already has corresponding Proxy
+  // 对象已经是 Proxy 过的了
   let observed = toProxy.get(target)
   if (observed !== void 0) {
     return observed
@@ -100,12 +115,16 @@ function createReactiveObject(
     return target
   }
   // only a whitelist of value types can be observed.
+  // 查看对象中的属性类型是否存在于白名单中
   if (!canObserve(target)) {
     return target
   }
+  // 判断对象的构造函数得出 handlers
   const handlers = collectionTypes.has(target.constructor)
     ? collectionHandlers
     : baseHandlers
+  // 创建 proxy 对象，这里主要要看 handlers 的处理了
+  // 所以我们去 handlers 的具体实现文件夹吧，先看 baseHandlers 的
   observed = new Proxy(target, handlers)
   toProxy.set(target, observed)
   toRaw.set(observed, target)

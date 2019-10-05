@@ -8,6 +8,8 @@ export interface Ref<T> {
   value: UnwrapNestedRefs<T>
 }
 
+// TS 语法解释：T 的类型如果继承自 Ref 类型（也就是结构），那 UnwrapNestedRefs 的类型就是 T
+// 反之是 UnwrapRef<T>
 export type UnwrapNestedRefs<T> = T extends Ref<any> ? T : UnwrapRef<T>
 
 const convert = (val: any): any => (isObject(val) ? reactive(val) : val)
@@ -68,6 +70,9 @@ type BailTypes =
 // Recursively unwraps nested value bindings.
 // Unfortunately TS cannot do recursive types, but this should be enough for
 // practical use cases...
+// TS 语法解释：这里有点绕，其实就是三元运算符罢了，在判断是不是这个类型
+// infer 的话用来推导类型。
+// 举个简单例子：T extends (infer V) => void ? V : T，这句语法意思是如果 T 是这样类型的函数，我就把参数类型推导出来然后返回出去
 export type UnwrapRef<T> = T extends Ref<infer V>
   ? UnwrapRef2<V>
   : T extends Array<infer V>
