@@ -14,7 +14,7 @@ import { ReactiveEffect } from './effect'
 // which maintains a Set of subscribers, but we simply store them as
 // raw Sets to reduce memory overhead.
 
-// targetMap 存储依赖关系，类似以下结构
+// targetMap 存储依赖关系，类似以下结构，这个结构会在 effect 文件中被用到
 // {
 //   target: {
 //     key: Dep
