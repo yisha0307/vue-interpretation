@@ -20,6 +20,9 @@ import { ReactiveEffect } from './effect'
 //     key: Dep
 //   }
 // }
+// 解释下三者到底是什么：target 就是被 proxy 的对象，key 是对象触发 get 行为以后的属性
+// 比如 counter.num 触发了 get 行为，num 就是 key。dep 是回调函数，也就是 effect 中调用了 counter.num 的话
+// 这个回调就是 dep，需要收集起来下次使用。
 export type Dep = Set<ReactiveEffect>
 export type KeyToDepMap = Map<string | symbol, Dep>
 export const targetMap: WeakMap<any, KeyToDepMap> = new WeakMap()
