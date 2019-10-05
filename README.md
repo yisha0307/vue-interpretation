@@ -13,6 +13,9 @@ PS：不会对任何 DEV 环境下的代码做解读。
 ## 注释进度
 
 - [ ] reactivity
+  - [x] reactive
+  - [x] effect
+  - [ ] computed
 - [ ] runtime-core
 - [ ] runtime-dom
 - [ ] compiler-core
