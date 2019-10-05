@@ -1,42 +1,24 @@
-# vue-next [![CircleCI](https://circleci.com/gh/vuejs/vue-next.svg?style=svg&circle-token=fb883a2d0a73df46e80b2e79fd430959d8f2b488)](https://circleci.com/gh/vuejs/vue-next)
+## Vue 源码解析
 
-## Status: Pre-Alpha.
+这是一份 Fork 的 Vue 代码，状态为 pre-alpha。
 
-We have achieved most of the architectural goals and new features planned for v3:
+笔者会对这份代码做一个详细的核心源码解析。通过两个部分来完成这个解析：第一是加上这份代码的中文注释，第二是配套相应的文章。
 
-- Compiler
-  - [x] Modular architecture
-  - [x] "Block tree" optimization
-  - [x] More aggressive static tree hoisting
-  - [x] Source map support
-  - [x] Built-in identifier prefixing (aka "stripWith")
-  - [x] Built-in pretty-printing
-  - [x] Lean ~10kb brotli-compressed browser build after dropping source map and identifier prefixing
+你可以通过阅读我的 Commit 信息来了解到我是如何阅读这份代码的。
 
-- Runtime
-  - [x] Significantly faster
-  - [x] Simultaneous Composition API + Options API support, **with typings**
-  - [x] Proxy-based change detection
-  - [x] Fragments
-  - [x] Portals
-  - [x] Suspense w/ `async setup()`
+PS：不会对任何 DEV 环境下的代码做解读，类似以下代码：
 
-However, there are still some 2.x parity features not completed yet:
+## 注释进度
 
-- [ ] Server-side rendering
-- [ ] `<keep-alive>`
-- [ ] `<transition>`
-- [ ] Compiler DOM-specific transforms
-  - [ ] `v-on` DOM modifiers
-  - [ ] `v-model`
-  - [ ] `v-text`
-  - [ ] `v-pre`
-  - [ ] `v-once`
-  - [ ] `v-html`
-  - [ ] `v-show`
+- [ ] reactivity
+- [ ] runtime-core
+- [ ] runtime-dom
+- [ ] compiler-core
+- [ ] compiler-dom
 
-The current implementation also requires native ES2015+ in the runtime environment and does not support IE11 (yet).
+## 一起学习
 
-## Contribution
+觉得内容有帮助可以关注下我的公众号 「前端真好玩」或者加入 Vue 源码交流群。
 
-See [Contributing Guide](https://github.com/vuejs/vue-next/blob/master/.github/contributing.md).
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-034138.jpg)
+![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-034140.png)
