@@ -125,6 +125,7 @@ function createReactiveObject(
     : baseHandlers
   // 创建 proxy 对象，这里主要要看 handlers 的处理了
   // 所以我们去 handlers 的具体实现文件夹吧，先看 baseHandlers 的
+  // 另外不熟悉 proxy 用法的，可以先熟悉下文档 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy
   observed = new Proxy(target, handlers)
   toProxy.set(target, observed)
   toRaw.set(observed, target)
