@@ -119,7 +119,7 @@ function createReactiveObject(
   if (!canObserve(target)) {
     return target
   }
-  // 判断对象的构造函数得出 handlers
+  // 判断对象的构造函数得出 handlers，集合类和别的类型用到的 handler 不一样
   const handlers = collectionTypes.has(target.constructor)
     ? collectionHandlers
     : baseHandlers
