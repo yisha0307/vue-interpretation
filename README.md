@@ -12,14 +12,18 @@ PS：不会对任何 DEV 环境下的代码做解读。
 
 ## 注释进度
 
-- [ ] reactivity
+- [x] reactivity
   - [x] reactive
   - [x] effect
-  - [ ] computed
+  - [x] computed
 - [ ] runtime-core
 - [ ] runtime-dom
 - [ ] compiler-core
 - [ ] compiler-dom
+
+## 文章列表
+
+- [数据响应系统原理解析](./article/数据响应.md)
 
 ## 一起学习
 
