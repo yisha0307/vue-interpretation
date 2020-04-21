@@ -1,5 +1,5 @@
 import { reactive, readonly, toRaw } from './reactive'
-import { OperationTypes } from './operations'
+import { OperationTypes } from './operations' // enum
 import { track, trigger } from './effect'
 import { LOCKED } from './lock'
 import { isObject, hasOwn } from '@vue/shared'

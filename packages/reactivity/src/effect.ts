@@ -1,4 +1,5 @@
 import { OperationTypes } from './operations'
+// Dep: Set<ReactiveEffect>
 import { Dep, targetMap } from './reactive'
 import { EMPTY_OBJ, extend } from '@vue/shared'
 
@@ -146,6 +147,7 @@ export function track(
   const effect = activeReactiveEffectStack[activeReactiveEffectStack.length - 1]
   if (effect) {
     if (type === OperationTypes.ITERATE) {
+      // Symbol('iterate') : 迭代
       key = ITERATE_KEY
     }
     // 这个函数做的事情就是塞依赖到 map 中，用于下次寻找是否有这个依赖

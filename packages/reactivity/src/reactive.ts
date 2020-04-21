@@ -36,6 +36,7 @@ const readonlyToRaw: WeakMap<any, any> = new WeakMap()
 
 // WeakSets for values that are marked readonly or non-reactive during
 // observable creation.
+// 储存readonly和non-reactive values (WeakSet)
 const readonlyValues: WeakSet<any> = new WeakSet()
 const nonReactiveValues: WeakSet<any> = new WeakSet()
 
@@ -43,6 +44,8 @@ const collectionTypes: Set<any> = new Set([Set, Map, WeakMap, WeakSet])
 const observableValueRE = /^\[object (?:Object|Array|Map|Set|WeakMap|WeakSet)\]$/
 
 const canObserve = (value: any): boolean => {
+  // toTypeString: Object.prototype.toString.call(value): 判断类型
+  // nonReactiveValues里没有：优化
   return (
     !value._isVue &&
     !value._isVNode &&
@@ -74,6 +77,7 @@ export function reactive(target: object) {
   )
 }
 
+// 被明确标记为readonly的object在proxy的时候要注入readonlyHandlers
 export function readonly<T extends object>(
   target: T
 ): Readonly<UnwrapNestedRefs<T>>
@@ -151,6 +155,7 @@ export function toRaw<T>(observed: T): T {
 }
 
 export function markReadonly<T>(value: T): T {
+  // weakSet的方法：add (还有delete和has)
   readonlyValues.add(value)
   return value
 }
