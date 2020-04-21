@@ -1,10 +1,12 @@
 import { reactive, readonly, toRaw } from './reactive'
+// 这个文件内容是proxy target的时候加入的handlers
 import { OperationTypes } from './operations' // enum
 import { track, trigger } from './effect'
 import { LOCKED } from './lock'
 import { isObject, hasOwn } from '@vue/shared'
 import { isRef } from './ref'
 
+// Symbol内置的propertyNames
 const builtInSymbols = new Set(
   Object.getOwnPropertyNames(Symbol)
     .map(key => (Symbol as any)[key])
@@ -27,7 +29,7 @@ function createGetter(isReadonly: boolean) {
       return res.value
     }
     track(target, OperationTypes.GET, key)
-    // 判断是否为对象，是的话将对象包装成 proxy
+    // 判断是否为对象，是的话将对象包装成 proxy, 不是就直接返回了
     return isObject(res)
       ? isReadonly
         ? // need to lazy access readonly and reactive here to avoid

@@ -77,7 +77,7 @@ export function reactive(target: object) {
   )
 }
 
-// 被明确标记为readonly的object在proxy的时候要注入readonlyHandlers
+// 被明确标记为readonly的object在proxy的时候要注入readonlyHandlers的get
 export function readonly<T extends object>(
   target: T
 ): Readonly<UnwrapNestedRefs<T>>

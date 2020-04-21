@@ -104,7 +104,7 @@ function run(effect: ReactiveEffect, fn: Function, args: any[]): any {
     // effect 回调在执行的过程中会触发 counter 的 get 函数
     // get 函数会触发 track，在 track 函数调用的过程中会执行 effect.deps.push(dep) 并且将
     // 也就是把回调 push 到了回调的 deps 属性上
-    // 这样在下次 counter.num = 7 的时候会触发 counter 的 ste 函数
+    // 这样在下次 counter.num = 7 的时候会触发 counter 的 set 函数
     // set 函数会触发 trigger，在 trigger 函数中会 effects.forEach(run)，把需要执行的回调都执行一遍
     try {
       activeReactiveEffectStack.push(effect)
@@ -135,7 +135,17 @@ export function pauseTracking() {
 export function resumeTracking() {
   shouldTrack = true
 }
-
+/**
+ *
+ *
+ * 最后形成的targetMap: 
+ * {
+ *    target: {
+ *      key: Dep
+ *    }
+ * }
+ * Dep: Array<dep>
+ */
 export function track(
   target: any,
   type: OperationTypes,
@@ -174,7 +184,15 @@ export function track(
     }
   }
 }
-
+/**
+ *
+ *
+ * @export
+ * @param {*} target
+ * @param {OperationTypes} type
+ * @param {(string | symbol)} [key]
+ * @param {any} [extraInfo] : 只有dev环境有, {oldValue, newValue}
+ */
 export function trigger(
   target: any,
   type: OperationTypes,
@@ -198,10 +216,12 @@ export function trigger(
     // depsMap.get(key) 取出依赖回调
     if (key !== void 0) {
       // 把依赖回调丢到 effects 中
+      // addRunner: 把dep里的effects加到effects,computed的effects加到computedRunners
       addRunners(effects, computedRunners, depsMap.get(key as string | symbol))
     }
     // also run for iteration key on ADD | DELETE
     if (type === OperationTypes.ADD || type === OperationTypes.DELETE) {
+      // ITERATE_KEY： Symbol('iterate')
       const iterationKey = Array.isArray(target) ? 'length' : ITERATE_KEY
       addRunners(effects, computedRunners, depsMap.get(iterationKey))
     }
@@ -239,6 +259,7 @@ function scheduleRun(
   key: string | symbol | undefined,
   extraInfo: any
 ) {
+  // extend(a,b) : 把b的属性都加到a上
   if (__DEV__ && effect.onTrigger) {
     effect.onTrigger(
       extend(
